@@ -113,6 +113,7 @@ public class WebSecurityConfig {
         configuration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT", "PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.addExposedHeader("File-Name");
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

@@ -25,14 +25,14 @@ public class User{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     private Long id;
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     private String username;
     @Column(nullable = false)
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column(unique = true)
+    @Column(nullable = false)
     private String email;
     @OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private List<Post> posts;
@@ -40,6 +40,7 @@ public class User{
     @OneToMany(mappedBy = "author", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private List<Comment> comments;
 
+    private Boolean enabled = false;
 
     public User(String username, String password, Role role, List<Post> postList) {
         this.username = username;

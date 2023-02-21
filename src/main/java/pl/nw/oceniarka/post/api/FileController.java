@@ -34,20 +34,17 @@ public class FileController {
         return new ResponseEntity<>(IOUtils.toByteArray(inputStream), HttpStatus.OK);
     }
 
-    /*@GetMapping("/cv")
-    public ResponseEntity<byte[]> getCV() throws IOException{
-
-        InputStream inputStream = fileLoader.loadCV();
-        return new ResponseEntity<>(IOUtils.toByteArray(inputStream), HttpStatus.OK);
-    }*/
-
     @GetMapping("/cv")
     public ResponseEntity<Resource> downloadCV() throws IOException{
         File newFile = fileLoader.loadCV();
         Resource resource = new UrlResource(newFile.toURI());
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("File-Name", "Niemir_Wisniewski_CV");
+        httpHeaders.add("File-Name", "Niemir_Wisniewski_CV.pdf");
         httpHeaders.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;File-Name=" + resource.getFilename());
+        System.out.println("httpHeaders: " + httpHeaders);
+        System.out.println("resource: " + resource);
+        System.out.println("resource.getFilename() =" + resource.getFilename());
+
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(Files.probeContentType(resource.getFile().toPath())))
                 .headers(httpHeaders).body(resource);
     }

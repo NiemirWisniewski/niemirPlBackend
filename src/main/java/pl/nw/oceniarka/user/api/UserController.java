@@ -6,12 +6,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.nw.oceniarka.user.dto.request.UserRequest;
 import pl.nw.oceniarka.user.dto.request.UserRequestDTO;
 import pl.nw.oceniarka.user.dto.response.UserResponse;
-import pl.nw.oceniarka.user.service.UserServiceInterface;
+import pl.nw.oceniarka.user.service.UserService;
 
 import java.util.List;
 
@@ -21,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserServiceInterface userService;
+    private final UserService userService;
 
     @GetMapping
     @ApiOperation("Show all users")
@@ -36,6 +35,11 @@ public class UserController {
         UriComponentsBuilder uriComponentsBuilder = UriComponentsBuilder.newInstance();
         UserResponse userResponse = userService.saveUser(userRequest);
         return ResponseEntity.created(uriComponentsBuilder.path("/api/users/{id}").build(userResponse.getId())).body(userResponse);
+    }
+
+    @GetMapping(path ="confirm")
+    public ResponseEntity<String> confirm(@RequestParam("token") String token) {
+        return ResponseEntity.ok().body(userService.confirmToken(token));
     }
 
     @GetMapping("/{id}")

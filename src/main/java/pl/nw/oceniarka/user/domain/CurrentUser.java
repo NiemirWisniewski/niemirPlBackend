@@ -14,4 +14,3 @@ public class CurrentUser {
     private Long id;
     private String username;
 }
-
