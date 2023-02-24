@@ -17,11 +17,25 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Boolean existsByEmail(String email);
 
-    User findByEmail(String username);
+    Optional<User> findByEmail(String username);
+
+    @Query("SELECT a.enabled FROM User a WHERE a.username = ?1")
+    Boolean isUsernameTaken(String username);
+
+    @Query("SELECT a.enabled FROM User a WHERE a.email = ?1")
+    Boolean isEmailTaken(String email);
 
     @Transactional
     @Modifying
     @Query("UPDATE User a " +
-            "SET a.enabled = TRUE WHERE a.email = ?1")
-    int enableUser(String email);
+            "SET a.enabled = TRUE WHERE (a.email = ?1 " +
+            "AND a.username = ?2)")
+    void enableUser(String email, String username);
+
+    @Transactional
+    @Modifying
+    @Query("DELETE FROM User a WHERE a.email = ?1 AND a.username != ?2")
+    void deleteOtherUsers(String email, String username);
+
+    Optional<User> findByToken(String token);
 }

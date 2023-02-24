@@ -10,6 +10,7 @@ import pl.nw.oceniarka.post.domain.Post;
 import pl.nw.oceniarka.user.domain.role.Role;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -41,6 +42,10 @@ public class User{
     private List<Comment> comments;
 
     private Boolean enabled = false;
+
+    private String token;
+
+    private Date tokenTime;
 
     public User(String username, String password, Role role, List<Post> postList) {
         this.username = username;

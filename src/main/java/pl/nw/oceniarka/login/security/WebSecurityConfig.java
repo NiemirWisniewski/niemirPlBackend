@@ -3,6 +3,7 @@ package pl.nw.oceniarka.login.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -63,7 +64,8 @@ public class WebSecurityConfig {
                 .and()
                 .authorizeRequests(auth -> auth
                         .mvcMatchers("/api/comments/**").hasAnyAuthority("ROLE_USER", "USER", "USER_ROLE", "MOD", "ADMIN")
-                        .mvcMatchers("/api/posts/**").hasAnyAuthority("ROLE_USER", "USER", "USER_ROLE", "MOD", "ADMIN")
+                        .mvcMatchers(HttpMethod.POST, "/api/posts/**")
+                        .hasAnyAuthority("ROLE_USER", "USER", "USER_ROLE", "MOD", "ADMIN")
                         .mvcMatchers("/api/users/**").permitAll()//hasAnyAuthority("ROLE_USER", "USER", "USER_ROLE", "MOD", "ADMIN")
                         .mvcMatchers("/swagger-ui/**").permitAll()
                         .anyRequest().permitAll())

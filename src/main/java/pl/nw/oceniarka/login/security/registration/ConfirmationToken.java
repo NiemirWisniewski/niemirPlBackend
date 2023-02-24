@@ -3,6 +3,8 @@ package pl.nw.oceniarka.login.security.registration;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import pl.nw.oceniarka.user.domain.User;
 
 import javax.persistence.*;
@@ -28,6 +30,7 @@ public class ConfirmationToken {
     @ManyToOne
     @JoinColumn(nullable = false,
     name = "user_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     public ConfirmationToken(String token, User user) {
