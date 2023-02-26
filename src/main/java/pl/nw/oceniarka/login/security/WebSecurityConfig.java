@@ -56,6 +56,8 @@ public class WebSecurityConfig {
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.cors().configurationSource(corsConfigurationSource())
                 .and()
+                .csrf(c -> c.ignoringAntMatchers("/api/users/**")
+                        .ignoringAntMatchers("/login"))
                 .csrf().csrfTokenRepository(csrfTokenRepository()).disable()
                 .headers().frameOptions().sameOrigin()
                 .and()
@@ -64,8 +66,7 @@ public class WebSecurityConfig {
                 .and()
                 .authorizeRequests(auth -> auth
                         .mvcMatchers("/api/comments/**").hasAnyAuthority("ROLE_USER", "USER", "USER_ROLE", "MOD", "ADMIN")
-                        .mvcMatchers(HttpMethod.POST, "/api/posts/**")
-                        .hasAnyAuthority("ROLE_USER", "USER", "USER_ROLE", "MOD", "ADMIN")
+                        .mvcMatchers(HttpMethod.POST, "/api/posts/**").hasAnyAuthority("ROLE_USER", "USER", "USER_ROLE", "MOD", "ADMIN")
                         .mvcMatchers("/api/users/**").permitAll()//hasAnyAuthority("ROLE_USER", "USER", "USER_ROLE", "MOD", "ADMIN")
                         .mvcMatchers("/swagger-ui/**").permitAll()
                         .anyRequest().permitAll())
