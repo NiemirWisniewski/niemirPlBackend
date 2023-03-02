@@ -7,9 +7,8 @@ import pl.nw.oceniarka.comment.dto.CommentMapper;
 import pl.nw.oceniarka.comment.dto.request.CommentRequest;
 import pl.nw.oceniarka.comment.dto.response.CommentResponse;
 import pl.nw.oceniarka.comment.repository.CommentRepository;
-import pl.nw.oceniarka.exception.commentException.CommentExceptionSupplier;
-import pl.nw.oceniarka.exception.userException.UserExceptionSupplier;
-import pl.nw.oceniarka.post.repository.PostRepository;
+import pl.nw.oceniarka.exceptions.commentException.CommentExceptionSupplier;
+import pl.nw.oceniarka.exceptions.userException.UserExceptionSupplier;
 import pl.nw.oceniarka.user.domain.User;
 import pl.nw.oceniarka.user.repository.UserRepository;
 

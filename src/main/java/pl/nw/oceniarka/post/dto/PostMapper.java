@@ -2,7 +2,7 @@ package pl.nw.oceniarka.post.dto;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import pl.nw.oceniarka.exception.userException.UserExceptionSupplier;
+import pl.nw.oceniarka.exceptions.userException.UserExceptionSupplier;
 import pl.nw.oceniarka.post.domain.Post;
 import pl.nw.oceniarka.post.dto.request.PostRequest;
 import pl.nw.oceniarka.post.dto.response.PostResponse;

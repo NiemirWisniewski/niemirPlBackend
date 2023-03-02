@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import pl.nw.oceniarka.exception.postException.PostExceptionSupplier;
-import pl.nw.oceniarka.exception.postException.ProcessException;
-import pl.nw.oceniarka.exception.userException.UserNotFoundException;
+import pl.nw.oceniarka.exceptions.postException.PostExceptionSupplier;
+import pl.nw.oceniarka.exceptions.postException.ProcessException;
+import pl.nw.oceniarka.exceptions.userException.UserNotFoundException;
 import pl.nw.oceniarka.post.domain.Post;
 import pl.nw.oceniarka.post.dto.PostMapper;
 import pl.nw.oceniarka.post.dto.request.PostRequest;
@@ -83,25 +83,6 @@ public class PostService {
 
         List<Post> postsList = postRepository.findAll(sort);
         return postsList.stream().map(postMapper::toPostResponseWithImage).collect(Collectors.toList());
-    }
-
-    public PostResponse findById(Long id){
-        return postMapper.toPostResponseWithImage(postRepository.findById(id).orElseThrow(PostExceptionSupplier.postNotFound(id)));
-    }
-
-    public void delete(Long id) {
-        Post post = postRepository.findById(id).orElseThrow(PostExceptionSupplier.postNotFound(id));
-        postRepository.delete(post);
-    }
-
-
-    public PostResponse update(Long id, PostRequest postRequest) {
-        Post post = postRepository.findById(id).orElseThrow(PostExceptionSupplier.postNotFound(id));
-        post.setContent(postRequest.getContent());
-        post.setUser(userRepository.findById(currentUser.getId())
-                .orElseThrow(PostExceptionSupplier.postNotFound(id)));
-        postRepository.save(post);
-        return postMapper.toPostResponseWithImage(post);
     }
 
     private Supplier<? extends RuntimeException> userNotFound(Long id){

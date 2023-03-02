@@ -1,11 +1,10 @@
 package pl.nw.oceniarka.comment.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pl.nw.oceniarka.exception.commentException.WrongRatingException;
+import pl.nw.oceniarka.exceptions.commentException.WrongRatingException;
 
 @Getter
 @Setter

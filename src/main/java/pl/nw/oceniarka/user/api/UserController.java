@@ -24,13 +24,6 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping
-    @ApiOperation("Show all users")
-    public ResponseEntity<List<UserResponse>> showAllUser(){
-        List<UserResponse> userResponseList = userService.findAllUsers();
-        return ResponseEntity.status(HttpStatus.OK).body(userResponseList);
-    }
-
     @PostMapping
     @ApiOperation("Create user")
     public ResponseEntity<UserResponse> createUser(@RequestBody UserRequestDTO userRequest){
@@ -48,33 +41,6 @@ public class UserController {
     @GetMapping(path ="confirm")
     public ResponseEntity<String> confirm(@RequestParam("token") String token) {
         return ResponseEntity.ok().body(userService.confirmToken(token));
-    }
-
-    @GetMapping("/{id}")
-    @ApiOperation("Find user")
-    public ResponseEntity<UserResponse> findUser(@PathVariable Long id){
-        UserResponse userResponse = userService.findUserById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(userResponse);
-    }
-
-    @DeleteMapping("/{id}")
-    @ApiOperation("Delete user")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id){
-        userService.deleteUser(id);
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
-
-    @PutMapping("/{id}")
-    @ApiOperation("Update user")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody UserRequest userRequest){
-        UserResponse userResponse = userService.updateUser(id, userRequest);
-        return ResponseEntity.status(HttpStatus.OK).body(userResponse);
-    }
-
-    @GetMapping("/current")
-    public ResponseEntity<UserResponse> getCurrentUser() {
-        UserResponse userResponseDTO = userService.getCurrentUser();
-        return new ResponseEntity<>(userResponseDTO, HttpStatus.OK);
     }
 
     @GetMapping("/password/reset")
