@@ -37,6 +37,7 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 
 @Configuration
@@ -58,7 +59,8 @@ public class WebSecurityConfig {
                 .and()
                 .csrf(c -> c.ignoringAntMatchers("/api/users/**")
                         .ignoringAntMatchers("/login"))
-                .csrf().csrfTokenRepository(csrfTokenRepository()).disable()
+                .csrf().csrfTokenRepository(csrfTokenRepository())
+                .and()
                 .headers().frameOptions().sameOrigin()
                 .and()
                 .addFilterAfter(csrfHeaderFilter(), CsrfFilter.class)
@@ -113,10 +115,15 @@ public class WebSecurityConfig {
 
     private CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:4200"));
+        configuration.setAllowedOrigins(List.of("http://localhost:4200"
+                , "https://niemir.toadres.pl"
+                , "http://niemir.toadres.pl"
+                , "http://frontend"
+        , "http://frontend:80"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS", "DELETE", "PUT", "PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.addExposedHeader("File-Name");
+        configuration.addExposedHeader("Access-Control-Allow-Origin");
         configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
