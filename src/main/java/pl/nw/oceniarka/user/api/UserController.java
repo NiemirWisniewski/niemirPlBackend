@@ -81,10 +81,10 @@ public class UserController {
     public void resetPassword(String token, HttpServletResponse response) {
         try {
             userService.validateToken(token);
-            response.setHeader("Location", "http://localhost:4200/#/new-password/" + token);
+            response.setHeader("Location", "https://niemir.toadres.pl/#/new-password/" + token);
             response.setStatus(HttpStatus.FOUND.value());
         } catch (Exception tokenExpiredException) {
-            response.setHeader("Location", "http://localhost:4200/#/tokenExpired");
+            response.setHeader("Location", "http://niemir.toadres.pl/#/tokenExpired");
             response.setStatus(HttpStatus.FOUND.value());
             // Found means that we expect such exception, and we have solution for that.
             // We invoke tokenExpired address in case of such situation.

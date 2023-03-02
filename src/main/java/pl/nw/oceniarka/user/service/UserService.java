@@ -55,7 +55,7 @@ public class UserService{
             ConfirmationToken confirmationToken = new ConfirmationToken(token, user);
             userRepository.save(user);
             confirmationTokenService.saveConfirmationToken(confirmationToken);
-            String link = "http://localhost:7070/api/users/confirm?token=" + token;
+            String link = "http://backend.bieda.it/api/users/confirm?token=" + token;
             emailService.sendConfirmationMail(userRequest.getEmail()
                     , userRequest.getUsername(),link);
             return userMapper.toUserResponse(user);
