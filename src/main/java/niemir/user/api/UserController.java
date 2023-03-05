@@ -3,6 +3,7 @@ package niemir.user.api;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 public class UserController {
 
     private final UserService userService;
+    private final Environment env;
 
     @PostMapping
     @ApiOperation("Create user")
@@ -42,13 +44,13 @@ public class UserController {
     }
 
     @GetMapping("/password/reset")
-    public void resetPassword(String token, HttpServletResponse response) {
+    public void resetPassword(@RequestParam("token") String token, HttpServletResponse response) {
         try {
             userService.validateToken(token);
-            response.setHeader("Location", "https://niemir.toadres.pl/#/new-password/" + token);
+            response.setHeader("Location", env.getProperty("frontendAddress") + "/#/new-password/" + token);
             response.setStatus(HttpStatus.FOUND.value());
         } catch (Exception tokenExpiredException) {
-            response.setHeader("Location", "http://niemir.toadres.pl/#/tokenExpired");
+            response.setHeader("Location", env.getProperty("frontendAddress") + "/#/tokenExpired");
             response.setStatus(HttpStatus.FOUND.value());
             // Found means that we expect such exception, and we have solution for that.
             // We invoke tokenExpired address in case of such situation.

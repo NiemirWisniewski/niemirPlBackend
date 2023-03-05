@@ -3,6 +3,7 @@ package niemir.email;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -14,13 +15,14 @@ import javax.mail.internet.MimeMessage;
 import java.text.MessageFormat;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Objects;
 
 @RequiredArgsConstructor
 @Service
 public class EmailService {
 
     private final JavaMailSender javaMailSender;
-    private final EmailProperties emailProperties;
+    private final Environment env;
     private final EmailResetPasswordProperties emailResetPasswordProperties;
     private final static Logger LOG = LoggerFactory.getLogger(EmailService.class);
 
@@ -30,17 +32,21 @@ public class EmailService {
         Instant startTime = Instant.now();
         LOG.info("sendConfirmationMail - start");
 
-        try{
+        try {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
-             helper.setText(buildEmail(name, link), true);
-             helper.setTo(to);
-             helper.setSubject("Confirm your email");
-             helper.setFrom(emailProperties.getFrom());
-             javaMailSender.send(mimeMessage);
-        } catch (MessagingException e){
-            LOG.error("failed to send email", e);
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
+            helper.setText(buildEmail(name, link), true);
+            helper.setTo(to);
+            helper.setSubject("Confirm your email");
+            helper.setFrom(env.getProperty("spring.mail.username"));
+            javaMailSender.send(mimeMessage);
+        } catch (MessagingException e) {
+            LOG.error("failed to send email" + e.getMessage());
             throw new IllegalStateException("failed to send email");
+        } finally {
+            Instant endTime = Instant.now();
+            LOG.info("[METRICS] --------------------> sendMail, time: {} {} ",
+                    Duration.between(startTime, endTime).getSeconds(), "sec.");
         }
     }
 
@@ -83,6 +89,6 @@ public class EmailService {
         String emailBody = MessageFormat.format(emailResetPasswordProperties.getBody(), user.getToken());
         String emailSubject = emailResetPasswordProperties.getSubject();
 
-        sendMail(emailProperties.getFrom(), user.getEmail(), emailSubject, emailBody);
+        sendMail(env.getProperty("spring.mail.username"), user.getEmail(), emailSubject, emailBody);
     }
 }
