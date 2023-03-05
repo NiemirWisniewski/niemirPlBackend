@@ -13,14 +13,14 @@ public class EmailResetPasswordProperties {
 
     private String subject;
     private String body;
-    @Value("${frontendAddress}")
-    private String frontendAddress;
+    private String backendAddress;
 
-    public EmailResetPasswordProperties() {
+    public EmailResetPasswordProperties(@Value("${backendAddress}") String backendAddress) {
         this.subject = "Niemir - Reset Hasla";
         this.body = "\r\nDrogi uzytkowniku, \r\n\r\nBy rozpoczac resetowanie hasla kliknij w link: " +
-                "\r\n" + frontendAddress + "/api/users/password/reset?token={0}\r\n\r\n\r\n" +
+                "\r\n" + backendAddress + "/api/users/password/reset?token={0}\r\n\r\n\r\n" +
                 "Pozdrawiam,\r\n Niemir Wisniewski.";
+        this.backendAddress = backendAddress;
     }
 
 }
