@@ -54,13 +54,12 @@ public class WebSecurityConfig {
     protected SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.cors().configurationSource(corsConfigurationSource())
                 .and()
-                .csrf(c -> c.ignoringAntMatchers("/api/users/**")
-                        .ignoringAntMatchers("/login"))
-                .csrf().csrfTokenRepository(csrfTokenRepository())
-                .and()
-                .headers().frameOptions().sameOrigin()
-                .and()
-                .addFilterAfter(csrfHeaderFilter(), CsrfFilter.class)
+                .csrf().disable()
+                //.csrf(c -> c.ignoringAntMatchers("/api/users/**")
+                //       .ignoringAntMatchers("/login"))
+                //.csrf().csrfTokenRepository(csrfTokenRepository())
+                //.and()
+                //.addFilterAfter(csrfHeaderFilter(), CsrfFilter.class)
                 .headers().frameOptions().sameOrigin()
                 .and()
                 .authorizeRequests(auth -> auth
@@ -102,12 +101,6 @@ public class WebSecurityConfig {
                 filterChain.doFilter(request, response);
             }
         };
-    }
-
-    //swagger element
-    @Bean
-    public InternalResourceViewResolver defaultViewResolver() {
-        return new InternalResourceViewResolver();
     }
 
     private CorsConfigurationSource corsConfigurationSource() {

@@ -7,19 +7,19 @@ import niemir.post.dto.PostMapper;
 import niemir.post.dto.request.PostRequest;
 import niemir.post.dto.response.PostResponse;
 import niemir.post.repository.PostRepository;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import niemir.user.domain.CurrentUser;
 import niemir.user.domain.User;
 import niemir.user.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -77,11 +77,12 @@ public class PostService {
         post.setImageUrl(newFile.getAbsolutePath());
     }
 
-    public List<PostResponse> findAll() {
-        Sort sort = Sort.by("dateAdded").descending();
+    public Page<PostResponse> findAll(int offset, int pageSize) {
 
-        List<Post> postsList = postRepository.findAll(sort);
-        return postsList.stream().map(postMapper::toPostResponseWithImage).collect(Collectors.toList());
+        Page<Post> postsPage = postRepository.findAll(PageRequest.of(offset, pageSize)
+                .withSort(Sort.by("dateAdded").descending()));
+        return postsPage.map(postMapper::toPostResponseWithImage);
+
     }
 
     private Supplier<? extends RuntimeException> userNotFound(Long id){
